@@ -6,8 +6,7 @@ void Input(int** a, const int rowCount, const int colCount);
 void Print(int** a, const int rowCount, const int colCount);
 int sumInRowsWithNegative(int** a, const int rowCount, const int colCount);
 void Part2_SaddlePoint(int** a, const int rowCount, const int colCount);
-bool IsMaxInRowN(int** a, const int n, const int k, const int colCount);
-bool IsMinInColK(int** a, const int n, const int k, const int rowCount);
+bool IsSaddlePoint(int** a, const int n, const int k, const int rowCount, const int colCount);
 
 int main()
 {
@@ -74,24 +73,21 @@ int sumInRowsWithNegative(int** matrix, int rows, int cols) {
 	return sum;
 }
 
-bool IsMaxInRowN(int** a, const int n, const int k, const int colCount)
+bool IsSaddlePoint(int** a, const int n, const int k, const int rowCount, const int colCount)
 {
-	for (int j = 0; j < colCount; j++)
-		if (a[n][j] > a[n][k])
-		{
+	int element = a[n][k];
+	
+	for (int j = 0; j < colCount; j++) {
+		if (a[n][j] < element) {
 			return false;
 		}
-	return true;
-}
+	}
 
-bool IsMinInColK(int** a, const int n, const int k, const int rowCount)
-
-{
-	for (int i = 0; i < rowCount; i++)
-		if (a[i][k] < a[n][k])
-		{
+	for (int i = 0; i < rowCount; i++) {
+		if (a[i][k] > element) {
 			return false;
 		}
+	}
 	return true;
 }
 
@@ -100,10 +96,11 @@ void Part2_SaddlePoint(int** a, const int rowCount, const int colCount)
 	cout << "Saddle points: max in row & min in col" << endl;
 	cout << setw(4) << "No" << setw(6) << "Row" << setw(6) << "Col" << endl;
 	int No = 0;
-	for (int n = 0; n < rowCount; n++)
-		for (int k = 0; k < colCount; k++)
-			if (IsMaxInRowN(a, n, k, colCount) && IsMinInColK(a, n, k, rowCount))
-			{
+	for (int n = 0; n < rowCount; n++) {
+		for (int k = 0; k < colCount; k++) {
+			if (IsSaddlePoint(a, n, k, rowCount, colCount)) {
 				cout << setw(4) << ++No << setw(6) << n << setw(6) << k << endl;
 			}
+		}
+	}
 }
